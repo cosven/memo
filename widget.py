@@ -4,7 +4,6 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-from myButton import NoDragPushButton
 from myLabel import NoteLabel
 from myMenu import MainMenu
 from trayIcon import TrayIcon

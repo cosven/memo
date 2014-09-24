@@ -187,14 +187,14 @@ class NoteLabel(QWidget):
             event.accept()
 
     def mouseMoveEvent(self, QMouseEvent):
-        pw = self.parentWidget()
-        widget1 = pw.getTrashRect()
-        flag = self.isCollide(widget1, self)
+        pw = self.parentWidget() # 获取父widget，也就是本程序中的主widget
+        widget1 = pw.getTrashRect() # 获取主widget 的 垃圾箱widget（函数名没有改过来）
+        flag = self.isCollide(widget1, self) # 检测两个widget的碰撞
         if flag:
-            self.emit(SIGNAL('collideTrash'), True)
+            self.emit(SIGNAL('collideTrash'), True) # 碰撞就发射collideTrash信号
         else:
             self.emit(SIGNAL('collideTrash'), False)
-
+        # 以下代码用于进行widget的拖拽
         if QMouseEvent.buttons() == Qt.LeftButton:
             self.move(QMouseEvent.globalPos() - self.dragPos)
             QMouseEvent.accept()
@@ -203,6 +203,7 @@ class NoteLabel(QWidget):
             QMouseEvent.ignore()
 
     def mouseReleaseEvent(self, QMouseEvent):
+        # 拖拽动作完成之后检测是否碰撞以确定该widget是否被删除
         pw = self.parentWidget()
         widget1 = pw.getTrashRect()
         flag = self.isCollide(widget1, self)
@@ -291,5 +292,6 @@ class NoteLabel(QWidget):
                 }
         '''
         self.label.setStyleSheet(hover)
+
 
 

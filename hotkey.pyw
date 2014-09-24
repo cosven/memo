@@ -26,7 +26,6 @@ class MSG(Structure):
                 ('time', c_int),
                 ('pt', POINT)]
 key = 192 # ~ key
-# key = ord('q')
 hotkeyId = 1
 if not windll.user32.RegisterHotKey(None, hotkeyId, None, key):
     sys.exit("Cant Register Hotkey")
@@ -34,7 +33,6 @@ if not windll.user32.RegisterHotKey(None, hotkeyId, None, key):
 msg = MSG()
 app = QApplication(sys.argv)
 w = widget.mainUi()
-# windll.user32.GetMessageA(byref(msg), None, 0, 0)
 while True:
     if (windll.user32.GetMessageA(byref(msg), None, 0, 0) != 0):
         if msg.message == WM_HOTKEY and msg.wParam == hotkeyId:
