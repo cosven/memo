@@ -14,27 +14,30 @@ class TrayIcon(QSystemTrayIcon):
         self.activated.connect(self.iconClicked)
     def initObjects(self):
         self.menu = QMenu()
+        self.showAction = QAction(u'显示', self, triggered=self.showWidget)
         self.quitAction = QAction(u"退出", self, triggered=self.exitApp)
         self.icon = QIcon('./img/icon.png')
 
     def setObjects(self):
+        self.menu.addAction(self.showAction)
         self.menu.addAction(self.quitAction)
         self.setIcon(self.icon)
         self.setContextMenu(self.menu)
 
     def iconClicked(self, reason):
-        print reason 
+        print reason
         if reason==2 or reason==3:
             pw = self.parent()
             if pw.isVisible():
                 pw.hide()
             else:
                 pw.show()
-    
     def exitApp(self):
         self.setVisible(False)
         qApp.quit()
         sys.exit()
+    def showWidget(self):
+        self.emit(SIGNAL("showMain"))
 
 if __name__ == "__main__":
     import sys

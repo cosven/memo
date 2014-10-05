@@ -76,22 +76,15 @@ class FocusEdit(QWidget):
         else:
             self.emit(SIGNAL("EditFinish"))
 
-    def setFocus(self):
-        self.textEdit.setFocus()
-
-    def save(self):
-        self.textEdit.setDocument(self.textEdit.document())
-        self.timeEdit.setDateTime(self.timeEdit.dateTime())
 
 class NoteLabel(QWidget):
-    def __init__(self, memodata=None, parent=None):
+    def __init__(self, string=None, parent=None):
         super(NoteLabel, self).__init__(parent)
         self.initObjects()
-        self.setObjects(memodata)
+        self.setObjects(string)
         self.setMySizePolicy()
         self.setStyle()
         self.setEffects()
-        self.content = memodata
 
         self.okBtn.clicked.connect(self.ok)
         self.connect(self.contentEdit, SIGNAL("EditFinish"), self.ok)
@@ -103,6 +96,7 @@ class NoteLabel(QWidget):
         self.palette = QPalette()
         self.layout = QHBoxLayout()
         self.label = QLabel()
+        self.timeLabel = QLabel()
         self.deadlineLabel = QLabel()
         self.contentEdit = FocusEdit()
         self.okBtn = QPushButton(u'确定')
@@ -114,31 +108,31 @@ class NoteLabel(QWidget):
         self.actionTextFont = QAction(QIcon('./img/font.png'), "&Font", self, \
                 triggered=self.textFont)
 
-    def setAllLabel(self, memodata):
-        string = memodata['content']
+    def setObjects(self, string):
         if string:
-            self.label.setText(string)
-            self.contentEdit.setText(string)
+                self.label.setText(string)
         else:
-            self.label.setText(u'<i>内容为空</i>')
-            self.contentEdit.setText(u'内容为空')
-        self.deadlineLabel.setText(memodata['deadline'])
-        self.contentEdit.setTimeFromText(memodata['deadline'])
+            self.label.setText(u'主人，点击我可以进行编辑')
 
-    def setObjects(self, memodata):
-        self.setAllLabel(memodata)
         self.setPalette(self.palette)
         self.setLabelDefaultFont()
         self.label.setMargin(5)
         self.label.setPalette(self.palette)
         self.label.setWordWrap(True)
 
+        string = QDateTime.currentDateTime().toString(Qt.TextDate)
+        self.timeLabel.setText(string)
+        self.deadlineLabel.setText(string)
+        self.timeLabel.setMargin(10)
+        self.timeLabel.setPalette(self.palette)
+        self.timeLabel.setWordWrap(True)
         self.deadlineLabel.setMargin(10)
         self.deadlineLabel.setPalette(self.palette)
         self.deadlineLabel.setWordWrap(True)
 
         self.layout.addWidget(self.label)
         self.layout.addSpacing(3)
+        self.layout.addWidget(self.timeLabel)
         self.layout.addSpacing(3)
         self.layout.addWidget(self.deadlineLabel)
         self.layout.addWidget(self.contentEdit)
@@ -153,7 +147,8 @@ class NoteLabel(QWidget):
         self.setMinimumWidth(460)
         self.label.setMaximumWidth(300)
         self.label.setMinimumWidth(300)
-        self.deadlineLabel.setMinimumWidth(100)
+        self.timeLabel.setMinimumWidth(100)
+        self.deadlineLabel.setMinimumWidth(80)
         self.contentEdit.setMinimumHeight(40)
         self.contentEdit.setMaximumHeight(40)
         self.okBtn.setMaximumHeight(40)
@@ -166,6 +161,7 @@ class NoteLabel(QWidget):
         font.setFamily('Microsoft YaHei')
         font.setPointSize(10)
         self.label.setFont(font)
+        self.timeLabel.setFont(font)
         self.deadlineLabel.setFont(font)
 
     def setStyle(self):
@@ -194,6 +190,7 @@ class NoteLabel(QWidget):
         '''
         self.okBtn.setStyleSheet(btn)
         self.label.setStyleSheet(label)
+        self.timeLabel.setStyleSheet(label)
         self.deadlineLabel.setStyleSheet(label)
 
     def setEffects(self):
@@ -232,21 +229,22 @@ class NoteLabel(QWidget):
         font = QFontDialog.getFont(currentFont, self)
         if font[1]:
             self.label.setFont(font[0])
+            self.timeLabel.setFont(font[0])
             self.deadlineLabel.setFont(font[0])
             self.actionTextFont.setFont(font[0])
 
     def mouseDoubleClickEvent(self, event):
-        self.contentEdit.save()
         if event.button() == Qt.LeftButton:
             self.label.hide()
+            self.timeLabel.hide()
             self.deadlineLabel.hide()
-            self.contentEdit.setText(self.contentEdit.document().toPlainText())
-            text = self.deadlineLabel.text()
+            self.contentEdit.setText(self.label.text())
+
+            text = self.timeLabel.text()
             self.contentEdit.setTimeFromText(text)
             self.contentEdit.show()
             self.contentEdit.setFocus()
             self.okBtn.show()
-            self.emit(SIGNAL('Editing'))
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -275,10 +273,10 @@ class NoteLabel(QWidget):
         widget1 = pw.getTrashRect()
         flag = self.isCollide(widget1, self)
         if flag:
+            print "yes"
             self.emit(SIGNAL('collideTrash'), False)
-            self.content['finished'] = True
-            self.emit(SIGNAL('OneMemoFinish'), self.content['content'])
             self.hide()
+            self.destroy()
         else:
             self.emit(SIGNAL('collideTrash'), False)
             self.hide()
@@ -297,22 +295,23 @@ class NoteLabel(QWidget):
 
     def ok(self):
         text = self.contentEdit.document()
-        self.content['content'] = unicode(text.toPlainText())
         self.label.setText(text.toPlainText())
         self.okBtn.hide()
         self.contentEdit.hide()
         self.label.show()
 
         datetime = self.contentEdit.dateTime().toString()
-        self.content['deadline'] = unicode(datetime)
+        self.timeLabel.setText(datetime)
+        self.timeLabel.show()
         self.deadlineLabel.setText(datetime)
         self.deadlineLabel.show()
-        self.editFinish() # it will emit signal to let parent know
+        self.editFinish()
 
     def editFinish(self):
         self.emit(SIGNAL("EditFinish"))
 
     def editing(self):
+        print "emit editing"
         self.emit(SIGNAL("Editing"))
 
     def isCollide(self, widget1, widget2):
@@ -360,7 +359,4 @@ class NoteLabel(QWidget):
                 }
         '''
         self.label.setStyleSheet(hover)
-
-    def getContent(self):
-        return self.content
 
