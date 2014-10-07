@@ -23,6 +23,9 @@ class EffectLabel(QLabel):
     def changeEffects(self):
         self.opacity.setOpacity(0.9)
         self.setGraphicsEffect(self.opacity)
+    
+    def mouseMoveEvent(self, event):
+        pass
 
 class EffectButton(QPushButton):
     def __init__(self, parent=None):
@@ -44,6 +47,9 @@ class EffectButton(QPushButton):
         self.opacity.setOpacity(0.9)
         self.setGraphicsEffect(self.opacity)
 
+    def mouseMoveEvent(self, event):
+        pass
+
 class MainMenu(QWidget):
     def __init__(self, parent=None):
         super(MainMenu, self).__init__(parent)
@@ -64,8 +70,8 @@ class MainMenu(QWidget):
 
     def setObjects(self):
         self.layout.addWidget(self.addBtn)
-        self.layout.addStretch(1)
         self.layout.addWidget(self.trashLabel)
+        self.layout.addStretch(1)
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
 

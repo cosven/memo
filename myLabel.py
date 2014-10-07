@@ -11,6 +11,8 @@ class FocusEdit(QWidget):
         self.setObjects()
         self.setStyle()
         self.setMySizePolicy()
+        self.connect(self.timeEdit, SIGNAL("dateTimeChanged(QDateTime)"),
+                self.setDateTime)
 
     def initObjects(self):
         self.textEdit = QTextEdit()
@@ -54,6 +56,9 @@ class FocusEdit(QWidget):
 
     def setText(self, text):
         self.textEdit.setText(text)
+
+    def setDateTime(self, datetime):
+        self.timeEdit.setDateTime(datetime)
 
     def setTimeFromText(self, text):
         datetime = QDateTime.fromString(text)
@@ -275,9 +280,10 @@ class NoteLabel(QWidget):
         widget1 = pw.getTrashRect()
         flag = self.isCollide(widget1, self)
         if flag:
-            self.emit(SIGNAL('collideTrash'), False)
+            self.emit(SIGNAL('collideTrash'), True)
             self.content['finished'] = True
             self.emit(SIGNAL('OneMemoFinish'), self.content['content'])
+            print "emit meomofinish"
             self.hide()
         else:
             self.emit(SIGNAL('collideTrash'), False)
@@ -299,12 +305,13 @@ class NoteLabel(QWidget):
         text = self.contentEdit.document()
         self.content['content'] = unicode(text.toPlainText())
         self.label.setText(text.toPlainText())
+        datetime = self.contentEdit.dateTime().toString()
+        self.content['deadline'] = unicode(datetime)
+
         self.okBtn.hide()
         self.contentEdit.hide()
         self.label.show()
 
-        datetime = self.contentEdit.dateTime().toString()
-        self.content['deadline'] = unicode(datetime)
         self.deadlineLabel.setText(datetime)
         self.deadlineLabel.show()
         self.editFinish() # it will emit signal to let parent know

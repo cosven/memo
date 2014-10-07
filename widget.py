@@ -1,5 +1,5 @@
+#!/usr/bin/python
 # -*- coding:utf8 -*-
-#! /usr/bin/env python
 import os
 import json
 
@@ -11,8 +11,6 @@ from myLabel import NoteLabel
 from myMenu import MainMenu
 from trayIcon import TrayIcon
 import dataAccess
-
-
 
 class mainUi(QWidget):
     def __init__(self, parent=None):
@@ -41,17 +39,16 @@ class mainUi(QWidget):
 
     def setObjects(self):
         self.trayIcon.show()
-        # self.setWindowFlags(Qt.FramelessWindowHint)
-        selfSize = QSize(600, 370)
-        deskRect = self.getDeskSize()
-        selfPoint = QPoint()
-        selfPoint.setX(deskRect.center().x() - selfSize.width()/2)
-        selfPoint.setY(deskRect.center().y() - selfSize.height()/2)
+        # selfSize = QSize(600, 370)
+        # deskRect = self.getDeskSize()
+        # selfPoint = QPoint()
+        # selfPoint.setX(deskRect.center().x() - selfSize.width()/2)
+        # selfPoint.setY(deskRect.center().y() - selfSize.height()/2)
 
-        self.setGeometry(QRect(selfPoint, selfSize))
+        # self.setGeometry(QRect(selfPoint, selfSize))
         # self.setMaximumSize(568,370)
-        self.setMinimumSize(600,370)
-        self.setMaximumSize(600,370)
+        self.setMinimumWidth(550)
+        self.setMaximumWidth(600)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.leftLayout.addWidget(self.mainMenu)
@@ -107,12 +104,13 @@ class mainUi(QWidget):
             f.close()
 
     def setEffects(self):
-        backImg = QPixmap('./img/1.png').scaled(self.size())
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        backImg = QPixmap('./img/1.jpg').scaled(self.size())
         self.palette = QPalette()
         self.palette.setBrush(self.backgroundRole(), QBrush(backImg))
         # self.palette.setColor(QPalette.Background, QColor(255,255,255,200))
         self.setPalette(self.palette)
-        # self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.StrongFocus)
 
     def addLabel(self, data):
@@ -144,6 +142,7 @@ class mainUi(QWidget):
                 self.trashHover)
         self.connect(label, SIGNAL("Editing"), self.editing)
         self.connect(label, SIGNAL("EditFinish"), self.editFinish)
+        self.connect(label, SIGNAL("OneMemoFinish"), self.oneMemoFinish)
         self.centerLayout.insertWidget(allCount-1, label)
         self.setFirstMemo()
 #        self.deadlineReady()
@@ -198,10 +197,20 @@ class mainUi(QWidget):
             self.show()
 
     def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            self.dragPos = event.globalPos() - self.pos()
         if self.isEditing:
             self.emit(SIGNAL("EditFinish")) # label will catch this signal and ok 
-        else:
-            event.accept()
+        event.accept()
+
+    def mouseMoveEvent(self, QMouseEvent):
+        # 以下代码用于进行widget的拖拽
+        if QMouseEvent.buttons() == Qt.LeftButton:
+            self.move(QMouseEvent.globalPos() - self.dragPos)
+            QMouseEvent.accept()
+
+        if QMouseEvent.buttons() == Qt.RightButton:
+            QMouseEvent.ignore()
 
     def closeEvent(self, event):
         data = self.getData()
@@ -232,13 +241,18 @@ class mainUi(QWidget):
                 if not self.firstMemo.has_key('deadline'):
                     self.firstMemo = each
                 else:
+                    if self.firstMemo['finished']:
+                        self.firstMemo = each
                     self.firstMemo = self.compareTime(self.firstMemo, each)
         self.trayIcon.showMessage(u'你现在最先需要完成', \
                 self.firstMemo['deadline']+'\n'+self.firstMemo['content'], \
                 1, 100)
 
     def oneMemoFinish(self, string):
-        self.trayIcon.showMessage(u'下面任务已完成', string, 1, 100)
+        print "memo receive"
+        self.trayIcon.showMessage(u'下面任务已完成', string, 1, 1000)
+        # self.setFirstMemo()
+        # self.deadlineReady()
 
 
 class mainWidget(QWidget):
@@ -254,7 +268,6 @@ class mainWidget(QWidget):
         self.layout = QHBoxLayout()
     
     def setObjects(self):
-        selfSize = QSize(600, 370)
         deskRect = self.getDeskSize()
         selfPoint = QPoint()
         selfPoint.setX(deskRect.center().x() - selfSize.width()/2)
