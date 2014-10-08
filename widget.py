@@ -251,8 +251,8 @@ class mainUi(QWidget):
     def oneMemoFinish(self, string):
         print "memo receive"
         self.trayIcon.showMessage(u'下面任务已完成', string, 1, 1000)
-        # self.setFirstMemo()
-        # self.deadlineReady()
+        self.setFirstMemo()
+        self.deadlineReady()
 
 
 class mainWidget(QWidget):
