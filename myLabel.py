@@ -88,6 +88,10 @@ class FocusEdit(QWidget):
         self.textEdit.setDocument(self.textEdit.document())
         self.timeEdit.setDateTime(self.timeEdit.dateTime())
 
+    def mouseMoveEvent(self, QMouseEvent):
+        pass
+
+
 class NoteLabel(QWidget):
     def __init__(self, memodata=None, parent=None):
         super(NoteLabel, self).__init__(parent)

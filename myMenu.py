@@ -24,9 +24,6 @@ class EffectLabel(QLabel):
         self.opacity.setOpacity(0.9)
         self.setGraphicsEffect(self.opacity)
     
-    def mouseMoveEvent(self, event):
-        pass
-
 class EffectButton(QPushButton):
     def __init__(self, parent=None):
         super(EffectButton, self).__init__(parent)
@@ -130,4 +127,3 @@ class MainMenu(QWidget):
     
     def addBtnClicked(self):
         self.emit(SIGNAL("add"))
-
