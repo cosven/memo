@@ -110,7 +110,8 @@ class mainUi(QWidget):
             f.close()
 
     def setEffects(self):
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.FramelessWindowHint | \
+                Qt.Tool)
         backImg = QPixmap('./img/1.jpg').scaled(self.size())
         self.palette = QPalette()
         self.palette.setBrush(self.backgroundRole(), QBrush(backImg))
