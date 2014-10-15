@@ -94,6 +94,12 @@ class mainUi(QWidget):
         date = QDate.currentDate().toString()
         if os.path.exists('log.json'):
             self.initLabel(unicode(date))
+            dictdata = {}
+            dictdata['last'] = unicode(date)
+            jsondata = json.dumps(dictdata)
+            f = open('log.json', 'w')
+            f.write(jsondata)
+            f.close()
         else:
             ' first run the program '
             dictdata = {}
@@ -211,6 +217,11 @@ class mainUi(QWidget):
 
         if QMouseEvent.buttons() == Qt.RightButton:
             QMouseEvent.ignore()
+
+    def exit(self):
+        data = self.getData()
+        dataAccess.save(data)
+        self.close()
 
     def closeEvent(self, event):
         data = self.getData()
