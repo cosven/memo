@@ -57,5 +57,8 @@ target/
 *.pyc
 *.json
 
-# vim swp file
+# vim swp file, cscope , ctags
 *.swp
+*.out
+tags
+
