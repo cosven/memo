@@ -118,7 +118,7 @@ class mainUi(QWidget):
         # self.palette.setBrush(self.backgroundRole(), QBrush(backImg))
         # # self.palette.setColor(QPalette.Background, QColor(255,255,255,200))
         # self.setPalette(self.palette)
-        # self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.StrongFocus)
 
     def addLabel(self, data):

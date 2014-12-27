@@ -52,3 +52,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# pyc json 
+*.pyc
+*.json
+
+# vim swp file
+*.swp
