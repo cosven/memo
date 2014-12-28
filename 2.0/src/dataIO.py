@@ -47,6 +47,24 @@ import setting
 
 
 def updateConfigFile(date):
+    '''
+    @note:
+        更新config文件
+
+    @param:
+        date
+
+    @attention::
+        把含有中文的json以中文形式写入文件
+        import json
+        data = {}
+        data['title'] = unicode(title)
+        f = open("test.json", 'w')
+        data = json.dumps(data, indent=4, sort_keys=True,
+            ensure_ascii=False).encode('utf8')
+        f.write(data)
+        f.close()
+    '''
     f = open(setting.CONFIGJSONFILE, 'w')   # 创建配置文件
     configData = {}
     configData['lastdate'] = date
@@ -106,9 +124,14 @@ def read(date):
 
 def write(date, data):
     '''
-    当程序退出时，先调用这个函数
-    保存当天的memo
-    更新config文件
+    @note:
+        当程序退出时，先调用这个函数
+        保存当天的memo
+        更新config文件
+
+    @param date
+    @param data: 程序结束时保存的memolist，json类型
+
     '''
     # log.info("Enter write func!")
     file_name = date + '.json'

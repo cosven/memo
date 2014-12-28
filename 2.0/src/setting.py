@@ -19,10 +19,25 @@
 UBUNTU = False
 WINDOWS = False
 
+LEVEL = 0   # 0 for dev, 1 for INFO, 2 for release
+
+# resources path
 IMGPATH = '../img/'
 DATAPATH = '../data/'
 
-LEVEL = 0   # 0 for dev, 1 for INFO, 2 for release
-
 CONFIGJSONFILE = DATAPATH + 'config.json'
 LOGFILE = DATAPATH + 'error.log'
+
+topLabelImgPath = IMGPATH + 'navbar.png'
+leftRedImgPath = IMGPATH + 'left_red.png'
+windowIconImgPath = IMGPATH + 'icon.png'
+spacerOneImgPath = IMGPATH + 'line.png'
+topNoImgPath = IMGPATH + 'top_no.png'
+topYesImgPath = IMGPATH + 'top_yes.png'
+
+# font path
+FONTPATH = '../font/'
+
+YOUYUAN = FONTPATH + 'youyuan.ttf'
+MSYAHEI = FONTPATH + 'msyh.ttf'
+UBUNTUMONO = FONTPATH + 'ubuntumono.ttf'

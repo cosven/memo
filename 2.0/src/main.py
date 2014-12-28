@@ -11,7 +11,18 @@
 #       History:
 # =============================================================================
 
-from logger import log
+
+import os
+import sys
+
+from PyQt4 import QtGui
+
+from window import Window
 
 if __name__ == "__main__":
-    log.info("Start")
+    os.chdir(sys.path[0])
+
+    app = QtGui.QApplication(sys.argv)
+    w = Window()
+    w.show()
+    sys.exit(app.exec_())
