@@ -1,5 +1,9 @@
 #! /bin/bash
 
-# 你需要安装epydoc
+# you need to install sphinx
 
-epydoc --html -v ../src -o ../epydoc
+sphinx-apidoc -o ../docs/ ../src/
+cd ../docs/
+make html
+
+
