@@ -177,7 +177,15 @@ latex_elements = {
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+    'preamble': '''
+    \\hypersetup{unicode=true}
+    \\usepackage{CJKutf8}
+    \\usepackage{indentfirst}
+    \\setlength{\\parindent}{2em}
+    \\AtBeginDocument{\\begin{CJK}{UTF8}{gbsn}}
+    \\AtEndDocument{\\end{CJK}}
+    \\DeclareUnicodeCharacter{00A0}{ }
+    '''
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
