@@ -60,6 +60,7 @@ target/
 # vim swp file, cscope , ctags
 *.swp
 *.out
+*.xml
 tags
 
 2.0/font/
