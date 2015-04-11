@@ -67,8 +67,8 @@ class MainMenu(QWidget):
 
     def setObjects(self):
         self.layout.addWidget(self.addBtn)
-        self.layout.addWidget(self.trashLabel)
         self.layout.addStretch(1)
+        self.layout.addWidget(self.trashLabel)
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
 

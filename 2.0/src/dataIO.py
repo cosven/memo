@@ -86,8 +86,8 @@ def read(date):
     @param date: 就是当天的日期
         >>> from PyQt4.QtCore import QDate
         >>> date = QDate.currentDate()
-        >>> date.toString("yyyy-mm-dd")
-        2014-12-18
+        >>> date.toString("yyyy-MM-dd")
+        2012-12-15
 
     @return memo_list: 返回memo列表
     """

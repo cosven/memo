@@ -60,7 +60,6 @@ class MemoWidget_Ui(object):
 
         self.leftLabel.setPixmap(self.leftRedPix)
         self.centerWidget.setFixedWidth(300)
-        self.centerWidget.setFixedWidth(300)
         self.centerWidget.setMaximumHeight(142)
         self.titleLabel.setFixedHeight(33)
         self.timeLabel.setFixedHeight(22)

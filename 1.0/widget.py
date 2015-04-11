@@ -3,7 +3,6 @@
 import os
 import json
 
-from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -25,7 +24,6 @@ class mainUi(QWidget):
         self.connect(self.trayIcon, SIGNAL("show"), self.show)
         self.connect(self.timer, SIGNAL("timeout()"), self.deadlineCome)
         self.connect(self.trayIcon, SIGNAL("showMain"), self.myShow)
-
 
     def initObjects(self):
         self.timer = QTimer()
@@ -52,11 +50,10 @@ class mainUi(QWidget):
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.leftLayout.addWidget(self.mainMenu)
-        self.centerLayout.addStretch(1)
+        self.layout.addStretch(1)
         self.layout.addLayout(self.leftLayout)
         self.layout.addSpacing(10)
         self.layout.addLayout(self.centerLayout)
-        self.layout.addStretch(1)
         self.setLayout(self.layout)
         self.setWindowIcon(QIcon('./img/icon.png'))
         self.trayIcon.setParent(self)
@@ -110,13 +107,7 @@ class mainUi(QWidget):
             f.close()
 
     def setEffects(self):
-        self.setWindowFlags(Qt.FramelessWindowHint | \
-                Qt.Tool)
-        backImg = QPixmap('./img/1.jpg').scaled(self.size())
-        self.palette = QPalette()
-        self.palette.setBrush(self.backgroundRole(), QBrush(backImg))
-        # self.palette.setColor(QPalette.Background, QColor(255,255,255,200))
-        self.setPalette(self.palette)
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setFocusPolicy(Qt.StrongFocus)
 
@@ -202,6 +193,14 @@ class mainUi(QWidget):
     def myShow(self):
         if not self.isVisible():
             self.show()
+        self.setWindowsFlags(Qt.WindowStaysOnTopHint)
+
+    def enterEvent(self, event):
+        self.mainMenu.show()
+
+    def leaveEvent(self, event):
+        if self.centerLayout.count() != 0:
+            self.mainMenu.close()
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -278,7 +277,7 @@ class mainWidget(QWidget):
     def initObjects(self):
         self.m = mainUi()
         self.layout = QHBoxLayout()
-    
+
     def setObjects(self):
         deskRect = self.getDeskSize()
         selfPoint = QPoint()
@@ -302,5 +301,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     w = mainUi()
+    w.move(QApplication.desktop().width(), 0)
     w.show()
     sys.exit(app.exec_())

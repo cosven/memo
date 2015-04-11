@@ -37,6 +37,7 @@ class TrayIcon(QSystemTrayIcon):
         self.parent().exit()
         qApp.quit()
         sys.exit()
+
     def showWidget(self):
         self.emit(SIGNAL("showMain"))
 
