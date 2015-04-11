@@ -116,12 +116,18 @@ class NoteLabel(QWidget):
         self.contentEdit = FocusEdit()
         self.okBtn = QPushButton(u'确定')
 
+
         pix = QPixmap(16, 16)
         pix.fill(Qt.black)
         self.actionTextColor = QAction(QIcon(pix), "&Color", self, \
                 triggered=self.textColor)
         self.actionTextFont = QAction(QIcon('./img/font.png'), "&Font", self, \
                 triggered=self.textFont)
+
+    def setFirstLabel(self):
+        print 'first label'
+        self.palette.setColor(self.label.foregroundRole(), Qt.red)
+        self.label.setPalette(self.palette)
 
     def setAllLabel(self, memodata):
         string = memodata['content']
@@ -141,6 +147,8 @@ class NoteLabel(QWidget):
         self.label.setMargin(5)
         self.label.setPalette(self.palette)
         self.label.setWordWrap(True)
+
+        self.palette.setColor(self.label.foregroundRole(), Qt.black)
 
         self.deadlineLabel.setMargin(10)
         self.deadlineLabel.setPalette(self.palette)
@@ -226,7 +234,6 @@ class NoteLabel(QWidget):
     def textColor(self):
         currentColor = self.palette.color(QPalette.WindowText)
         color = QColorDialog.getColor(currentColor, self)
-
         if not color.isValid():
             return
         else:

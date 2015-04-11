@@ -241,7 +241,7 @@ class mainUi(QWidget):
 
     def deadlineCome(self):
         self.trayIcon.showMessage(u"最后期限已到", self.firstMemo['content']\
-                + '\n\n' + u'10分钟后提醒', 1,
+                + '\n\n' + u'10分钟后将进行下次提醒', 1,
                 100)
 
     def setFirstMemo(self):
@@ -255,7 +255,17 @@ class mainUi(QWidget):
                     if self.firstMemo['finished']:
                         self.firstMemo = each
                     self.firstMemo = self.compareTime(self.firstMemo, each)
-        self.trayIcon.showMessage(u'你现在最先需要完成', \
+        for i in range(self.centerLayout.count()):
+            item = self.centerLayout.itemAt(i)
+            try:
+                w = item.widget()
+                if w:
+                    c = w.getContent()
+                    if c == self.firstMemo:
+                        w.setFirstLabel()
+            except Exception, e:
+                print "get label widget error"
+        self.trayIcon.showMessage(u'你最先需要完成', \
                 self.firstMemo['deadline']+'\n'+self.firstMemo['content'], \
                 1, 100)
 
